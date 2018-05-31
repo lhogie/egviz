@@ -1,28 +1,53 @@
 package egviz;
 
+import java.awt.Rectangle;
+
 public class SpringLayout extends ForceBasedAlgo
 {
 
 	@Override
-	public void step(JGraph g)
+	public void step(JGraph g, Rectangle r)
 	{
+
 		for (Node u : g.nodes)
 		{
 			for (Node v : g.nodes)
 			{
-				double dx = u.x - v.x;
-				double factor = g.neighbors(u, v) != 0 && Math.abs(dx) > 20 ? attractionFactor
-						: repulsionFactor;
+				if (u != v)
+				{
+					int dx = u.x - v.x;
+					int dy = u.y - v.y;
+					double d = Math.sqrt(dx * dx + dy * dy);
+					double maxDistance = Math
+							.sqrt(r.width + r.width + r.height + r.height);
+					double force = Math.pow(d / maxDistance, 2);
 
-				double xshift = dx * factor / 2 - dx;
-				u.x -= xshift;
-				v.x += xshift;
+					double direction = g.arcType(u, v) != 0 && g.arcType(v, u) != 0
+							? attractionFactor
+							: repulsionFactor;
 
-				double dy = u.y - v.y;
-				double yshift = dy * factor / 2 - dy;
-				u.y -= yshift;
-				v.y += yshift;
+					force *= direction;
+
+					int xshift = (int) (dx * force - dx);
+					u.x = ensureBounds(u.x - xshift, r.x, r.x + r.width);
+					v.x += ensureBounds(v.x + xshift, r.x, r.x + r.width);
+
+					int yshift = (int) (dy * force / 2 - dy);
+					u.y = ensureBounds(u.y - yshift, r.y, r.y + r.height);
+					v.y += ensureBounds(v.y + yshift, r.y, r.y + r.height);
+				}
 			}
 		}
+	}
+
+	private int ensureBounds(int x, int lb, int up)
+	{
+		if (x < lb)
+			return lb;
+
+		if (x > up)
+			return up;
+
+		return x;
 	}
 }

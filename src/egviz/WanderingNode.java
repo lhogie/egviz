@@ -1,15 +1,16 @@
 package egviz;
 
+import java.awt.Rectangle;
 import java.util.Random;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-public class WanderingNode extends PlacementAlgo
+public class WanderingNode extends Layout
 {
 	class MoveNode extends Node
 	{
-		double xx, yy;
+		int dx, dy;
 
 		public MoveNode(Object e)
 		{
@@ -17,41 +18,47 @@ public class WanderingNode extends PlacementAlgo
 		}
 	}
 
-	Random r = new Random();
+	Random prng = new Random();
 
 	@Override
-	public void step(JGraph g)
+	public void step(JGraph g, Rectangle r)
 	{
 		for (Node u : g.nodes)
 		{
 			MoveNode mm = (MoveNode) u;
-			mm.xx += (r.nextDouble() - 0.5) / 100;
-			u.x += mm.xx;
 
-			if (u.x < 0)
+			mm.dx += prng.nextInt(3) - 1;
+			u.x += mm.dx;
+
+			// hits left wall
+			if (u.x < r.x)
 			{
-				u.x = 0;
-				mm.xx = - mm.xx;
+				u.x = r.x;
+				mm.dx = mm.dy = 0;
 			}
 
-			if (u.x > 1)
+			// hits right wall
+			if (u.x > r.x + r.width)
 			{
-				u.x = 1;
-				mm.xx = - mm.xx;
+				u.x = r.x + r.width;
+				mm.dx = mm.dy = 0;
 			}
 
-			u.y += (r.nextDouble() - 0.5) / 100;
+			mm.dy += prng.nextInt(3) - 1;
+			u.y += mm.dy;
 
-			if (u.y < 0)
+			// hits roof wall
+			if (u.y < r.y)
 			{
-				u.y = 0;
-				mm.yy = - mm.yy;
+				u.y = r.y;
+				mm.dx = mm.dy = 0;
 			}
 
-			if (u.y > 1)
+			// hits bottom wall
+			if (u.y > r.y + r.height)
 			{
-				u.y = 1;
-				mm.yy = - mm.yy;
+				u.y = r.y + r.height;
+				mm.dx = mm.dy = 0;
 			}
 		}
 	}

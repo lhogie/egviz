@@ -1,19 +1,22 @@
 package egviz;
 
+import java.awt.Rectangle;
+import java.util.Random;
+
 public class Node
 {
+	static Random prng = new Random();
 	public final Object e;
-	double x, y;
+	int x, y;
 
 	public Node(Object e)
 	{
 		this.e = e;
-		shuffle();
 	}
 
-	public void shuffle()
+	public void shuffle(Rectangle r)
 	{
-		x = Math.random();
-		y = Math.random();
+		x = prng.nextInt(r.width) + r.x;
+		y = prng.nextInt(r.height) + r.y;
 	}
 }

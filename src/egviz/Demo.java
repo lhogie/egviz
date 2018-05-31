@@ -2,30 +2,24 @@ package egviz;
 
 import java.awt.Color;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Demo
 {
 	public static void main(String[] args)
 	{
-		JGraph g = new JGraph(new SpringLayout())
+		JGraph g = new JGraph(new WanderingNode())
 		{
 			@Override
-			protected int neighbors(Node u, Node v)
+			protected int arcType(Node u, Node v)
 			{
-				if (((String) u.e).compareTo((String) v.e) < 0)
-				{
-					Node tmp = u;
-					u = v;
-					v = tmp;
-				}
-
 				if (u.e.equals("Luc") && v.e.equals("Cle"))
 					return 1;
 				if (u.e.equals("Luc") && v.e.equals("Elisa"))
 					return 1;
-				if (u.e.equals("Lucien") && v.e.equals("Luc"))
-					return 1;
+				if (u.e.equals("Luc") && v.e.equals("Lucien"))
+					return 2;
 				if (u.e.equals("Nad") && v.e.equals("Cle"))
 					return 1;
 				if (u.e.equals("Nad") && v.e.equals("Elisa"))
@@ -34,12 +28,14 @@ public class Demo
 					return 1;
 				if (u.e.equals("Mitou") && v.e.equals("Luc"))
 					return 1;
-				if (u.e.equals("Luc") && v.e.equals("Bubus"))
+				if (u.e.equals("Bubus") && v.e.equals("Luc"))
 					return 1;
-				if (u.e.equals("vers a soie") && v.e.equals("Elisa"))
+				if (u.e.equals("Bubus") && v.e.equals("Animal"))
 					return 1;
+				if (u.e.equals("Elisa") && v.e.equals("vers a soie"))
+					return 2;
 
-				return 2;
+				return 0;
 			}
 
 			@Override
@@ -71,20 +67,33 @@ public class Demo
 			{
 				if (u.e.equals("Luc"))
 					return 20;
+				
+				if (u.e.equals("Animal"))
+					return 150;
 
 				return 10;
 			}
+
+			@Override
+			public ImageIcon getIcon(Node u)
+			{
+				if (u.e.equals("Animal"))
+					return new ImageIcon(getClass().getResource("animal.png"));
+					
+				return null;
+			}
 		};
 
-		g.add("Luc");
-		g.add("Nad");
-		g.add("Elisa");
-		g.add("Cle");
-		g.add("Mitou");
-		g.add("Bubus");
-		g.add("Nicole");
-		g.add("Lucien");
-		g.add("vers a soie");
+		g.addNode("Luc");
+		g.addNode("Nad");
+		g.addNode("Elisa");
+		g.addNode("Cle");
+		g.addNode("Mitou");
+		g.addNode("Bubus");
+		g.addNode("Nicole");
+		g.addNode("Lucien");
+		g.addNode("vers a soie");
+		g.addNode("Animal");
 
 		JFrame f = new JFrame("graph view");
 		f.setSize(800, 600);

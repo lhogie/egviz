@@ -1,10 +1,12 @@
 package egviz;
 
+import java.awt.Rectangle;
+
 import javax.swing.JComponent;
 
-public abstract class PlacementAlgo
+public abstract class Layout
 {
-	public abstract void step(JGraph g);
+	public abstract void step(JGraph g, Rectangle r);
 
 	public abstract JComponent getControls();
 
@@ -12,5 +14,4 @@ public abstract class PlacementAlgo
 	{
 		return new Node(e);
 	}
-
 }

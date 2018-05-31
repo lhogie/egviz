@@ -10,17 +10,17 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class GraphControl extends JPanel
+public class GraphControls extends JPanel
 {
 	JButton shuffleButton = new JButton("Shuffle");
 	JSlider pauseSlider = new JSlider(0, 100, 50);
 	
-	public GraphControl(JGraph g)
+	public GraphControls(JGraph g)
 	{
 		add(shuffleButton);
 		add(new JLabel("Pause duration"));
 		add(pauseSlider);
-		pauseSlider.setName("pause");
+		pauseSlider.setValue((int) g.pauseDuration);
 		
 		shuffleButton.addActionListener(new ActionListener()
 		{
