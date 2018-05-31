@@ -21,7 +21,7 @@ public class WanderingNode extends Layout
 	Random prng = new Random();
 
 	@Override
-	public void step(JGraph g, Rectangle r)
+	public long step(JGraph g, Rectangle r)
 	{
 		for (Node u : g.nodes)
 		{
@@ -61,6 +61,8 @@ public class WanderingNode extends Layout
 				mm.dx = mm.dy = 0;
 			}
 		}
+		
+		return g.nodes.size();
 	}
 
 	@Override

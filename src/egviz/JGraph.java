@@ -3,7 +3,6 @@ package egviz;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -114,10 +113,9 @@ public abstract class JGraph extends JPanel
 	private void doDrawing(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
-		RenderingHints rh = new RenderingHints(
-	             RenderingHints.KEY_TEXT_ANTIALIASING,
-	             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	    g2.setRenderingHints(rh);
+		RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHints(rh);
 
 		for (Node u : nodes)
 		{
@@ -127,7 +125,7 @@ public abstract class JGraph extends JPanel
 
 				if (t != 0)
 				{
-					g2.drawLine(u.x, u.y, v.x, v.y);
+					g2.drawLine((int) u.x, (int) u.y, (int) v.x, (int) v.y);
 				}
 			}
 		}
@@ -145,10 +143,11 @@ public abstract class JGraph extends JPanel
 
 				if (icon != null)
 				{
-					icon = new ImageIcon(icon.getImage().getScaledInstance(-1, getSize(u), 0));
-					
-					g.drawImage(icon.getImage(), u.x - icon.getIconWidth() / 2,
-							u.y - icon.getIconHeight() / 2, this);
+					icon = new ImageIcon(
+							icon.getImage().getScaledInstance( - 1, getSize(u), 0));
+
+					g.drawImage(icon.getImage(), (int) u.x - icon.getIconWidth() / 2,
+							(int) u.y - icon.getIconHeight() / 2, this);
 				}
 				else if (text != null)
 				{
@@ -160,19 +159,22 @@ public abstract class JGraph extends JPanel
 
 					g.setColor(getFillColor(u));
 					int gap = 6;
-					g2.fillRect(u.x - textW / 2 - gap, u.y - textH / 2 - gap,
+					g2.fillRect((int) u.x - textW / 2 - gap, (int) u.y - textH / 2 - gap,
 							textW + 2 * gap, textH + 2 * gap);
 					g.setColor(getColor(u));
-					g2.drawRect(u.x - textW / 2 - gap, u.y - textH / 2 - gap,
+					g2.drawRect((int) u.x - textW / 2 - gap, (int) u.y - textH / 2 - gap,
 							textW + 2 * gap, textH + 2 * gap);
-					g2.drawGlyphVector(gv, u.x - textW / 2, u.y + textH / 2 + 2);
+					g2.drawGlyphVector(gv, (int) u.x - textW / 2,
+							(int) u.y + textH / 2 + 2);
 				}
 				else
 				{
 					g.setColor(getFillColor(u));
-					g.fillOval(u.x - usize / 2, u.y - usize / 2, usize, usize);
+					g.fillOval((int) u.x - usize / 2, (int) u.y - usize / 2, usize,
+							usize);
 					g.setColor(getColor(u));
-					g.drawOval(u.x - usize / 2, u.y - usize / 2, usize, usize);
+					g.drawOval((int) u.x - usize / 2, (int) u.y - usize / 2, usize,
+							usize);
 				}
 			}
 		}
@@ -206,7 +208,7 @@ public abstract class JGraph extends JPanel
 		return p;
 	}
 
-	public Container getBundleComponent()
+	public JComponent getBundleComponent()
 	{
 		JPanel p = new JPanel(new BorderLayout());
 		p.add(this, BorderLayout.CENTER);

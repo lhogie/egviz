@@ -6,8 +6,9 @@ public class SpringLayout extends ForceBasedAlgo
 {
 
 	@Override
-	public void step(JGraph g, Rectangle r)
+	public long step(JGraph g, Rectangle r)
 	{
+		long n = 0;
 
 		for (Node u : g.nodes)
 		{
@@ -15,8 +16,8 @@ public class SpringLayout extends ForceBasedAlgo
 			{
 				if (u != v)
 				{
-					int dx = u.x - v.x;
-					int dy = u.y - v.y;
+					double dx = u.x - v.x;
+					double dy = u.y - v.y;
 					double d = Math.sqrt(dx * dx + dy * dy);
 					double maxDistance = Math
 							.sqrt(r.width + r.width + r.height + r.height);
@@ -35,12 +36,17 @@ public class SpringLayout extends ForceBasedAlgo
 					int yshift = (int) (dy * force / 2 - dy);
 					u.y = ensureBounds(u.y - yshift, r.y, r.y + r.height);
 					v.y += ensureBounds(v.y + yshift, r.y, r.y + r.height);
+
+					if (xshift > 0 || yshift > 0)
+						++n;
 				}
 			}
 		}
+
+		return n;
 	}
 
-	private int ensureBounds(int x, int lb, int up)
+	private double ensureBounds(double x, double lb, double up)
 	{
 		if (x < lb)
 			return lb;
