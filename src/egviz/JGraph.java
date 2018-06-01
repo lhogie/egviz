@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,12 +163,13 @@ public abstract class JGraph extends JPanel implements Graph
 		doDrawing(g);
 	}
 
+	//RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+	//		RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 	private void doDrawing(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
-		RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2.setRenderingHints(rh);
+		//g2.setRenderingHints(rh);
 
 		for (Node u : nodes)
 		{
@@ -192,33 +192,26 @@ public abstract class JGraph extends JPanel implements Graph
 
 			if (usize > 0)
 			{
-				ImageIcon icon = getIcon(u);
-				String text = getText(u);
+				ensureCachesOKs(u, g2, usize);
 
-				if (icon != null)
+				if (u.cache_icon != null)
 				{
-					icon = new ImageIcon(
-							icon.getImage().getScaledInstance( - 1, getSize(u), 0));
-
-					g.drawImage(icon.getImage(), (int) u.x - icon.getIconWidth() / 2,
-							(int) u.y - icon.getIconHeight() / 2, this);
+					g.drawImage(u.cache_icon.getImage(),
+							(int) u.x - u.cache_icon.getIconWidth() / 2,
+							(int) u.y - u.cache_icon.getIconHeight() / 2, this);
 				}
-				else if (text != null)
+				else if (u.cache_text != null)
 				{
-					FontRenderContext frc = g2.getFontRenderContext();
-					Font font = getFont().deriveFont((float) usize);
-					GlyphVector gv = font.createGlyphVector(frc, u.e.toString());
-					int textW = (int) gv.getVisualBounds().getWidth();
-					int textH = (int) gv.getVisualBounds().getHeight();
-
 					g.setColor(getFillColor(u));
 					int gap = 6;
+					int textW = (int) u.cache_text.getVisualBounds().getWidth();
+					int textH = (int) u.cache_text.getVisualBounds().getHeight();
 					g2.fillRect((int) u.x - textW / 2 - gap, (int) u.y - textH / 2 - gap,
 							textW + 2 * gap, textH + 2 * gap);
 					g.setColor(getColor(u));
 					g2.drawRect((int) u.x - textW / 2 - gap, (int) u.y - textH / 2 - gap,
 							textW + 2 * gap, textH + 2 * gap);
-					g2.drawGlyphVector(gv, (int) u.x - textW / 2,
+					g2.drawGlyphVector(u.cache_text, (int) u.x - textW / 2,
 							(int) u.y + textH / 2 + 2);
 				}
 				else
@@ -231,6 +224,36 @@ public abstract class JGraph extends JPanel implements Graph
 							usize);
 				}
 			}
+		}
+	}
+
+	private void ensureCachesOKs(Node u, Graphics2D g2, int nodeSize)
+	{
+		if ( ! u.cache_icon_valid)
+		{
+			u.cache_icon = getIcon(u);
+
+			if (u.cache_icon != null)
+			{
+				u.cache_icon = new ImageIcon(
+						u.cache_icon.getImage().getScaledInstance( - 1, getSize(u), 0));
+			}
+
+			u.cache_icon_valid = true;
+		}
+
+		if ( ! u.cache_text_valid)
+		{
+			String text = getText(u);
+
+			if (text != null)
+			{
+				FontRenderContext frc = g2.getFontRenderContext();
+				Font font = getFont().deriveFont((float) nodeSize);
+				u.cache_text = font.createGlyphVector(frc, text);
+			}
+
+			u.cache_text_valid = true;
 		}
 	}
 

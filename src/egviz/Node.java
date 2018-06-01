@@ -1,7 +1,10 @@
 package egviz;
 
 import java.awt.Rectangle;
+import java.awt.font.GlyphVector;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 public class Node
 {
@@ -9,6 +12,10 @@ public class Node
 	public final Object e;
 	int x, y;
 	boolean isSelected;
+	public ImageIcon cache_icon;
+	public boolean cache_icon_valid;
+	public boolean cache_text_valid;
+	public GlyphVector cache_text;
 
 	public Node(Object e)
 	{
