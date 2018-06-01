@@ -8,6 +8,7 @@ public class Node
 	static Random prng = new Random();
 	public final Object e;
 	int x, y;
+	boolean isSelected;
 
 	public Node(Object e)
 	{

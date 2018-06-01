@@ -25,6 +25,9 @@ public class WanderingNodes extends Layout
 	{
 		for (Node u : g.getNodes())
 		{
+			if (u.isSelected)
+				continue;
+			
 			MoveNode mm = (MoveNode) u;
 
 			mm.dx += prng.nextInt(3) - 1;

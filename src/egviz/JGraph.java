@@ -11,6 +11,10 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.util.ArrayList;
@@ -27,11 +31,12 @@ public abstract class JGraph extends JPanel implements Graph
 	List<Node> nodes = new ArrayList<>();
 	long pauseDuration = 30;
 	Stroke stroke = new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	private Node selectedNode;
 
 	int mt, mr, mb, ml;
 	Rectangle layoutArea;
 
-	public JGraph(Graph g)
+	public JGraph()
 	{
 		this(new SpringLayout());
 	}
@@ -40,6 +45,56 @@ public abstract class JGraph extends JPanel implements Graph
 	{
 		this.algo = algo;
 		setBorder(new EmptyBorder(mr, ml, mb, mr));
+
+		addMouseListener(new MouseAdapter()
+		{
+			MouseMotionListener ml = new MouseMotionAdapter()
+			{
+				@Override
+				public void mouseDragged(MouseEvent e)
+				{
+					selectedNode.x = e.getX();
+					selectedNode.y = e.getY();
+				}
+			};
+
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				selectedNode.isSelected = false;
+				removeMouseMotionListener(ml);
+				selectedNode = null;
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				selectedNode = findClosestNode(e.getX(), e.getY());
+				selectedNode.isSelected = true;
+				addMouseMotionListener(ml);
+			}
+
+			private Node findClosestNode(int x, int y)
+			{
+				double minD = Double.MAX_VALUE;
+				Node minN = null;
+
+				for (Node n : nodes)
+				{
+					double dx = Math.abs(x - n.x);
+					double dy = Math.abs(y - n.y);
+					double d = Math.sqrt(dx * dx + dy * dy);
+
+					if (d < minD)
+					{
+						minD = d;
+						minN = n;
+					}
+				}
+
+				return minN;
+			}
+		});
 	}
 
 	public void start()

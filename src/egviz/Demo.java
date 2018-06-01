@@ -9,30 +9,32 @@ public class Demo
 {
 	public static void main(String[] args)
 	{
+		// creates a graphical graph using "wandering nodes" layout algorithm
 		JGraph g = new JGraph(new WanderingNodes())
 		{
 			@Override
-			public int arcType(Node u, Node v)
+			public int arcType(Node src, Node dest)
 			{
-				if (u.e.equals("Luc") && v.e.equals("Cle"))
+				// if "Luc" preceeds "Cle"
+				if (src.e.equals("Luc") && dest.e.equals("Cle"))
 					return 1;
-				if (u.e.equals("Luc") && v.e.equals("Elisa"))
+				if (src.e.equals("Luc") && dest.e.equals("Elisa"))
 					return 1;
-				if (u.e.equals("Luc") && v.e.equals("Lucien"))
+				if (src.e.equals("Luc") && dest.e.equals("Lucien"))
 					return 2;
-				if (u.e.equals("Nad") && v.e.equals("Cle"))
+				if (src.e.equals("Nad") && dest.e.equals("Cle"))
 					return 1;
-				if (u.e.equals("Nad") && v.e.equals("Elisa"))
+				if (src.e.equals("Nad") && dest.e.equals("Elisa"))
 					return 1;
-				if (u.e.equals("Nicole") && v.e.equals("Nad"))
+				if (src.e.equals("Nicole") && dest.e.equals("Nad"))
 					return 1;
-				if (u.e.equals("Mitou") && v.e.equals("Luc"))
+				if (src.e.equals("Mitou") && dest.e.equals("Luc"))
 					return 1;
-				if (u.e.equals("Bubus") && v.e.equals("Luc"))
+				if (src.e.equals("Bubus") && dest.e.equals("Luc"))
 					return 1;
-				if (u.e.equals("Bubus") && v.e.equals("Animal"))
+				if (src.e.equals("Bubus") && dest.e.equals("Animal"))
 					return 1;
-				if (u.e.equals("Elisa") && v.e.equals("vers a soie"))
+				if (src.e.equals("Elisa") && dest.e.equals("vers a soie"))
 					return 2;
 
 				return 0;
