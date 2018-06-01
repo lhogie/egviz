@@ -2,7 +2,6 @@ package egviz;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -22,7 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public abstract class JGraph extends JPanel
+public abstract class JGraph extends JPanel implements Graph
 {
 	private final Layout algo;
 	List<Node> nodes = new ArrayList<>();
@@ -32,7 +31,7 @@ public abstract class JGraph extends JPanel
 	int mt, mr, mb, ml;
 	Rectangle layoutArea;
 
-	public JGraph()
+	public JGraph(Graph g)
 	{
 		this(new SpringLayout());
 	}
@@ -180,18 +179,6 @@ public abstract class JGraph extends JPanel
 		}
 	}
 
-	public abstract int getSize(Node u);
-
-	public abstract String getText(Node u);
-
-	public abstract Color getColor(Node u);
-
-	public abstract Color getFillColor(Node u);
-
-	public abstract ImageIcon getIcon(Node u);
-
-	protected abstract int arcType(Node u, Node v);
-
 	public void shuffle()
 	{
 		for (Node u : nodes)
@@ -219,6 +206,11 @@ public abstract class JGraph extends JPanel
 	public void addNode(Object nodeElement)
 	{
 		nodes.add(algo.createNode(nodeElement));
+	}
+
+	public List<Node> getNodes()
+	{
+		return nodes;
 	}
 
 }

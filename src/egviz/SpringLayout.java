@@ -29,13 +29,13 @@ public class SpringLayout extends ForceBasedAlgo
 
 					force *= direction;
 
-					int xshift = (int) (dx * force - dx);
-					u.x = ensureBounds(u.x - xshift, r.x, r.x + r.width);
-					v.x += ensureBounds(v.x + xshift, r.x, r.x + r.width);
+					double xshift = dx * force - dx;
+					u.x = (int) ensureBounds(u.x - xshift, r.x, r.x + r.width);
+					v.x += (int) ensureBounds(v.x + xshift, r.x, r.x + r.width);
 
-					int yshift = (int) (dy * force / 2 - dy);
-					u.y = ensureBounds(u.y - yshift, r.y, r.y + r.height);
-					v.y += ensureBounds(v.y + yshift, r.y, r.y + r.height);
+					double yshift = dy * force / 2 - dy;
+					u.y = (int) ensureBounds(u.y - yshift, r.y, r.y + r.height);
+					v.y += (int) ensureBounds(v.y + yshift, r.y, r.y + r.height);
 
 					if (xshift > 0 || yshift > 0)
 						++n;

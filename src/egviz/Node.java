@@ -7,7 +7,7 @@ public class Node
 {
 	static Random prng = new Random();
 	public final Object e;
-	double x, y;
+	int x, y;
 
 	public Node(Object e)
 	{

@@ -9,10 +9,10 @@ public class Demo
 {
 	public static void main(String[] args)
 	{
-		JGraph g = new JGraph(new WanderingNode())
+		JGraph g = new JGraph(new WanderingNodes())
 		{
 			@Override
-			protected int arcType(Node u, Node v)
+			public int arcType(Node u, Node v)
 			{
 				if (u.e.equals("Luc") && v.e.equals("Cle"))
 					return 1;
@@ -67,7 +67,7 @@ public class Demo
 			{
 				if (u.e.equals("Luc"))
 					return 20;
-				
+
 				if (u.e.equals("Animal"))
 					return 150;
 
@@ -79,7 +79,7 @@ public class Demo
 			{
 				if (u.e.equals("Animal"))
 					return new ImageIcon(getClass().getResource("animal.png"));
-					
+
 				return null;
 			}
 		};
